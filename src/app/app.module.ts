@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { ThemesModule } from './themes/themes.module';
 import { PrimeNgModule } from './prime-ng/prime-ng.module';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent
@@ -16,7 +17,8 @@ import { PrimeNgModule } from './prime-ng/prime-ng.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     CoreModule,
-    PrimeNgModule
+    PrimeNgModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,13 +4,17 @@ import { BasicHomeBannerComponent } from 'src/app/themes/BasicTheme/home/basic-h
 import { BasicHomeExperienceComponent } from 'src/app/themes/BasicTheme/home/basic-home-experience/basic-home-experience.component';
 import { BasicHomeSkillsComponent } from 'src/app/themes/BasicTheme/home/basic-home-skills/basic-home-skills.component';
 import { DynamicComponentDataType } from '../model/dynamicComponentType';
+import { ThemeService } from './theme.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { PortfolioService } from './portfolio.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DynamicComponentService {
-
-  constructor() { }
+  
+  constructor(private themeService:ThemeService, private router: Router) { }
   HomePage: any[] = [
     {
       selector: 'BasicHomeBannerComponent',
@@ -194,20 +198,30 @@ export class DynamicComponentService {
     BasicHomeSkillsComponent: BasicHomeSkillsComponent,
     BasicHomeExperienceComponent: BasicHomeExperienceComponent
   };
-  getComponent() {
-    return this.HomePage.map((x: any) => {
+  dynamicPage= new BehaviorSubject([]);
+  setPage(param:Param) {
+    this.themeService.getProfile(`${param.user}/${param.page||'home'}`).subscribe((res:any)=>{
+      console.log("success",res);
+      this.dynamicPage.next(res)
+
+    },(err:any)=>{
+      console.log("error",err);
+      this.dynamicPage.next([]);
+      this.router.navigate(['/PageNotFoundComponent'])
+    })
+
+  }
+  getComponent(res:any){
+    return res.map((x: any) => {
       return new DynamicComponentDataType(
         this.typeComponent[x.selector],
         x.data
-        // const isBasicHomeBannerComponentPresent = this.typeComponent.some(component => component.BasicHomeBannerComponent !== undefined);
-
-        // if (isBasicHomeBannerComponentPresent) {
-        // const this.typeComponent.find((component) =>{
-        //   return component === x.name
-        // }
-        // }
-        // x.data
       );
     });
   }
+}
+
+export interface Param{
+   user?:any,
+   page?:any
 }

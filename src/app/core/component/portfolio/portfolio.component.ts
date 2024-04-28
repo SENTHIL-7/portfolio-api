@@ -17,32 +17,40 @@ export class PortfolioComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private router: Router, private dynamicservice: DynamicComponentService) { }
   paramData = {
-    data: ''
+    user: '',
+    page:''
   };
   ngOnInit(): void {
     this.route.params.subscribe((res: any) => {
       console.log("res", res);
 
-      if (res && res.data) {
+      if (res && res.user) {
         this.paramData = {
-          data: res.data
+          user: res.user,
+          page: res.page
         }
       };
-
     })
     console.log("param", this.paramData);
-    console.log("data", this.paramData.data);
+    console.log("data", this.paramData.user);
     // this.dynamicComponentDirective.dynamicComponent = PageNotFoundComponent;
-    this.DynamicComponentList = this.dynamicservice.getComponent();
+   this.dynamicservice.setPage(this.paramData);
+  this.dynamicservice.dynamicPage.subscribe((res:any)=>{
+    this.DynamicComponentList=this.dynamicservice.getComponent(res||[]);
     console.log("DynamicComponentList", this.DynamicComponentList);
-    const viewContainerRef = this.templateRef.viewContainerRef;
-    // viewContainerRef.clear();
-    this.DynamicComponentList.forEach((x: any) => {
-      const componentRef = viewContainerRef.createComponent<DynamicComponent>(
-        x.component
-      );
-      componentRef.instance.data = x.data;
-    });
+    if(this.DynamicComponentList.length>0){
+      const viewContainerRef = this.templateRef.viewContainerRef;
+      // viewContainerRef.clear();
+      this.DynamicComponentList.forEach((x: any) => {
+        const componentRef = viewContainerRef.createComponent<DynamicComponent>(
+          x.component
+        );
+        componentRef.instance.data = x.data;
+      });
+    }
+
+   })
+
   }
 
 
