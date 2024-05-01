@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DynamicComponentDirective } from 'src/app/shared/directive/dynamic-component.directive';
 import { DynamicComponent } from 'src/app/shared/model/dynamic-component';
 import { DynamicComponentDataType } from 'src/app/shared/model/dynamicComponentType';
-import { DynamicComponentService } from 'src/app/shared/service/dynamic-component.service';
+import { DynamicComponentService, Param } from 'src/app/shared/service/dynamic-component.service';
 
 
 @Component({
@@ -16,10 +16,7 @@ export class PortfolioComponent implements OnInit {
   @ViewChild(DynamicComponentDirective, { static: true }) templateRef!: DynamicComponentDirective;
   constructor(private route: ActivatedRoute,
     private router: Router, private dynamicservice: DynamicComponentService) { }
-  paramData = {
-    user: '',
-    page:''
-  };
+  paramData!:Param;;
   ngOnInit(): void {
     this.route.params.subscribe((res: any) => {
       console.log("res", res);
@@ -27,7 +24,7 @@ export class PortfolioComponent implements OnInit {
       if (res && res.user) {
         this.paramData = {
           user: res.user,
-          page: res.page
+          page: res.page 
         }
       };
     })
