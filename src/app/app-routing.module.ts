@@ -10,9 +10,9 @@ const routes: Routes = [
     path: 'portfolio/:user', component: PortfolioComponent
   },
   {path: 'portfolio/:user/:page', component: PortfolioComponent},
-  {path:'PageNotFoundComponent',component:PageNotFoundComponent}
+  {path:'**',component:PageNotFoundComponent}
 
-];
+];  
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
